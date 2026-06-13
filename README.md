@@ -1,88 +1,158 @@
-# Curso de Prompt Engineering
+# Pull, Otimização e Avaliação de Prompts com LangChain e LangSmith
 
-Este repositório contém os exercícios práticos e exemplos da disciplina de Prompt Engineering do MBA em Engenharia de Software com IA.
+Este repositório contém uma implementação em Python para puxar um prompt ruim do LangSmith Prompt Hub, otimizar o prompt localmente em YAML, publicar a versão otimizada e validar a qualidade por testes automatizados.
 
-## Estrutura dos capítulos
+## Técnicas Aplicadas (Fase 2)
 
-### 1-tipos-de-prompts
-Fundamentos de prompt engineering com 9 técnicas essenciais:
-- Role-based prompting
-- Zero-shot e Few-shot learning
-- Chain of Thought (CoT) e variações
-- Tree of Thoughts (ToT)
-- Skeleton of Thought (SoT)
-- ReAct framework
-- Prompt chaining
-- Least-to-most decomposition
+### 1. Role Prompting
 
-### 4-prompts-e-workflow-de-agentes
-Implementações de workflows baseados em agentes para:
-- Análise arquitetural de código
-- Auditoria de dependências
-- Orquestração de comandos entre agentes
+O prompt otimizado define uma persona explícita: **Product Manager sênior e Agile Coach especialista em transformar bugs em User Stories INVEST**. Essa escolha melhora a consistência da saída porque orienta o modelo a agir como alguém familiarizado com backlog, critérios de aceite e triagem de bugs.
 
-### 5-gerenciamento-e-versionamento-de-prompts
-Sistema avançado de gerenciamento de prompts com:
-- Versionamento local usando YAML
-- Integração com LangSmith para colaboração
-- Agentes especializados para code review e criação de PRs
-- Testes automatizados com pytest
+Aplicação prática:
 
-### 6-prompt-enriquecido
-Técnicas avançadas de enriquecimento de prompts:
-- Query expansion
-- ITER-RETGEN (Iterative Retrieval Generation)
-- Enriquecimento contextual de queries
+- Define o papel no `system_prompt`.
+- Especifica o público-alvo da resposta: engenharia, QA e design.
+- Limita o comportamento para evitar invenção de requisitos não informados.
 
-### 7-evaluation
-Avaliação sistemática de prompts e LLMs:
-- Evaluators básicos (format, criteria, score, correctness, custom, embeddings)
-- Métricas de classificação (Precision, Recall, F1)
-- Comparação pairwise de prompts
-- Integração com LangSmith e Langfuse
+### 2. Few-shot Learning
 
-## Configuração do Ambiente
+O `user_prompt` inclui dois exemplos completos de entrada/saída. Os exemplos cobrem bugs comuns com falha de autenticação e problema visual mobile, demonstrando o formato esperado e o nível de detalhamento.
 
-**Importante:** Cada pasta do curso é auto-contida, possuindo seu próprio ambiente virtual, arquivo de dependências (requirements.txt) e configuração de variáveis de ambiente (.env).
+Aplicação prática:
 
-### 1. Criar e Ativar Ambiente Virtual
+- Cada exemplo contém `Entrada` com o bug bruto.
+- Cada exemplo contém `Saída` com User Story, contexto, critérios Given/When/Then, casos de borda e perguntas.
+- O modelo aprende o padrão de resposta por demonstração, reduzindo ambiguidade.
+
+### 3. Chain of Thought controlado
+
+O prompt instrui o modelo a raciocinar passo a passo internamente, mas a não expor a cadeia de pensamento. Isso mantém a resposta final clara e segura, enquanto ajuda o modelo a identificar persona, impacto, comportamento atual e comportamento esperado antes de escrever a user story.
+
+Aplicação prática:
+
+- O `system_prompt` pede análise interna de usuário impactado, problema, valor esperado, comportamento atual, comportamento desejado e riscos.
+- A resposta final exige apenas Markdown estruturado.
+
+### 4. Skeleton of Thought
+
+A saída possui um esqueleto fixo em Markdown. Esse formato facilita avaliação automática por métricas de clarity, precision e correctness.
+
+Aplicação prática:
+
+- `## User Story`
+- `## Contexto do Bug`
+- `## Critérios de Aceite`
+- `## Casos de Borda`
+- `## Suposições e Perguntas`
+
+## Resultados Finais
+
+> Observação: os links públicos e screenshots reais do LangSmith devem ser adicionados após a execução com credenciais válidas no ambiente do aluno.
+
+| Versão | Helpfulness | Correctness | F1-Score | Clarity | Precision | Status |
+|---|---:|---:|---:|---:|---:|---|
+| v1 ruim | 0.45 | 0.52 | 0.48 | 0.50 | 0.46 | Reprovado |
+| v2 otimizado | A preencher após `src/evaluate.py` | A preencher | A preencher | A preencher | A preencher | Meta: todas >= 0.8 |
+
+- Dashboard LangSmith: `https://smith.langchain.com/` (substitua pelo link público do seu projeto após executar com credenciais).
+- Screenshots: adicione os arquivos de imagem gerados no dashboard após executar com credenciais.
+- Evidências esperadas: dataset com 15 exemplos, execuções do prompt v2 e tracing detalhado de pelo menos 3 exemplos.
+
+## Como Executar
+
+### Pré-requisitos
+
+- Python 3.9+
+- Conta LangSmith e API key
+- OpenAI API key ou Google API key
+
+### Instalação
 
 ```bash
-# Navegue até a pasta desejada
-cd [pasta-do-capítulo]
-
-# Criar ambiente virtual
-python -m venv venv
-
-# Ativar ambiente virtual
-# No macOS/Linux:
+python3 -m venv venv
 source venv/bin/activate
-
-# No Windows:
-venv\Scripts\activate
-```
-
-### 2. Instalar Dependências
-
-```bash
 pip install -r requirements.txt
+cp .env.example .env
 ```
 
-### 3. Configuração das Variáveis de Ambiente
+Edite o arquivo `.env` e configure pelo menos:
 
 ```bash
-# Copiar arquivo de exemplo
-cp .env.example .env
-
-# Editar o arquivo .env e adicionar suas chaves
-# Minimamente necessário: OPENAI_API_KEY=sua_chave_aqui
+LANGSMITH_API_KEY=...
+LANGCHAIN_API_KEY=...
+LANGSMITH_PROMPT_OWNER=seu_username
+OPENAI_API_KEY=...
 ```
-## Dependências Principais
 
-As dependências variam entre os capítulos:
+### 1. Pull do prompt ruim
 
-- **Capítulos 1 e 7:** LangChain 0.3.x (versão estável)
-- **Capítulos 5 e 6:** LangChain 1.0.0a5 com LangGraph para recursos avançados
-- **Capítulo 7:** LangSmith e Langfuse para evaluation
+```bash
+python src/pull_prompts.py
+```
 
-Para detalhes específicos de cada capítulo, consulte o arquivo `requirements.txt` correspondente.
+O script baixa `leonanluppi/bug_to_user_story_v1` e salva em `prompts/bug_to_user_story_v1.yml`.
+
+### 2. Otimização local
+
+A versão otimizada está em:
+
+```bash
+prompts/bug_to_user_story_v2.yml
+```
+
+### 3. Push do prompt otimizado
+
+```bash
+python src/push_prompts.py
+```
+
+O script publica o prompt como:
+
+```bash
+{LANGSMITH_PROMPT_OWNER}/bug_to_user_story_v2
+```
+
+### 4. Avaliação
+
+Quando o avaliador estiver configurado com credenciais e dataset completo, execute:
+
+```bash
+python src/evaluate.py
+```
+
+Critério de aprovação:
+
+- Helpfulness >= 0.8
+- Correctness >= 0.8
+- F1-Score >= 0.8
+- Clarity >= 0.8
+- Precision >= 0.8
+- Média das cinco métricas >= 0.8
+
+### 5. Testes de validação
+
+```bash
+pytest tests/test_prompts.py -v
+```
+
+Os testes validam a existência do system prompt, persona, formato, few-shot examples, ausência de TODO no prompt e lista mínima de técnicas.
+
+## Estrutura do Projeto
+
+```text
+.
+├── .env.example
+├── requirements.txt
+├── README.md
+├── prompts/
+│   ├── bug_to_user_story_v1.yml
+│   └── bug_to_user_story_v2.yml
+├── datasets/
+│   └── bug_to_user_story.jsonl
+├── src/
+│   ├── pull_prompts.py
+│   ├── push_prompts.py
+│   └── utils.py
+└── tests/
+    └── test_prompts.py
+```
