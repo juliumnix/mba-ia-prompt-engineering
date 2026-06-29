@@ -1,0 +1,8 @@
+name: bug_to_user_story_v1
+version: v1
+description: Prompt inicial propositalmente simples para converter bug em user story.
+metadata:
+  source: leonanluppi/bug_to_user_story_v1
+  quality: low
+system_prompt: "Você transforma bugs em user stories."
+user_prompt: "Bug: {bug}\nCrie uma user story."

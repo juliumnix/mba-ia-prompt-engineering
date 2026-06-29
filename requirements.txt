@@ -1,0 +1,7 @@
+langchain>=0.3.27
+langchain-openai>=0.3.34
+langchain-google-genai>=2.1.0
+langsmith>=0.4.32
+python-dotenv>=1.1.1
+PyYAML>=6.0.2
+pytest>=8.3.4

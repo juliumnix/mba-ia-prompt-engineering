@@ -1,0 +1,3 @@
+{"bug":"Login fails with 500 error when password contains #","expected":"As a registered user, I want to log in with passwords containing special characters so that I can access my account securely."}
+{"bug":"Checkout button is disabled after applying a valid coupon","expected":"As a shopper, I want to complete checkout after applying a valid coupon so that I can finish my purchase with the discount."}
+{"bug":"Mobile menu overlaps page content on iPhone SE","expected":"As a mobile user, I want the navigation menu to render without overlapping content so that I can browse the site easily."}
