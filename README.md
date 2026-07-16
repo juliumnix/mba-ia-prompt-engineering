@@ -57,18 +57,23 @@ Critério do desafio: todas as métricas >= 0.8 — **atingido**.
 ### Evidências no LangSmith
 
 - Prompt público no Hub: https://smith.langchain.com/hub/juliumnix/bug_to_user_story_v2
-- Projeto / avaliação: https://smith.langchain.com/projects/bug-to-user-story-prompt-evaluation
-- Dataset: `bug-to-user-story-prompt-evaluation-eval` (15 exemplos)
+- Projeto (tracing): https://smith.langchain.com/o/83778d5a-f8b4-4c09-93d0-4cbfe72172ad/projects/p/d61be2df-3c16-45fe-b87f-8b6779a760d1
+- Dataset (15 exemplos): https://smith.langchain.com/o/83778d5a-f8b4-4c09-93d0-4cbfe72172ad/datasets/085305ac-bc6e-45a0-896a-bcd7eeab7a2e
 - Handle do Hub: `juliumnix`
+
+> Nota: o link curto `https://smith.langchain.com/projects/...` impresso pelo script antigo pode abrir como “não existe”. Use os links com `/o/.../projects/p/...` acima.
 
 Evidência textual da aprovação: [`docs/evidence/avaliacao-aprovada.md`](docs/evidence/avaliacao-aprovada.md)
 
-Screenshots recomendados para a entrega (salvar em `docs/screenshots/`):
+Screenshots salvos em [`docs/screenshots/`](docs/screenshots/):
 
-1. Dashboard do projeto com a execução aprovada
-2. Tabela de métricas no terminal (`STATUS: APROVADO`)
-3. Página do prompt público no Hub
-4. Tracing detalhado de pelo menos 3 exemplos
+1. `01-hub-prompt-publico.png` — prompt público no Hub
+2. `02-projeto-tracing.png` — projeto com lista de execuções
+3. `03-trace-precision-1.png` / `03-trace-precision-2.png` — tracing detalhado (métrica Precision)
+4. `04-trace-clarity-input.png` / `05-trace-clarity-output.png` — tracing detalhado (métrica Clarity)
+
+Opcional: print do dataset com 15 exemplos em  
+https://smith.langchain.com/o/83778d5a-f8b4-4c09-93d0-4cbfe72172ad/datasets/085305ac-bc6e-45a0-896a-bcd7eeab7a2e
 
 ## Como Executar
 
